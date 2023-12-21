@@ -1,0 +1,78 @@
+Patrick MacEachen - 40209790 
+Concordia University 
+2023 - 10 - 02 
+Comp346 - Programming Assignment 1
+
+=============================================================================================
+
+Task 1: Atomicity Violation 
+
+The problem causing the inconsistent state of the account array is the deposit and withdraw methods of the Account class. These methods are not synchronized leading to atomicity violations. Multiple threads are concurrently accessing and modifying shared data without the proper synchronization which leads to inconsistent or/and unexpected states. 
+
+In the Account array, the deposit and withdraw are allowing multiple threads to modify the balance  field leading to race conditions. This is where the actions by one thread like depositing/withdrawing from the account can be possible overwriting by a concurent thread. 
+
+The solution to this problem is to synchronize the deposit and withdraw methods (or a specific statement) which will prevent the race conditions and atomicity violations resulting in a consistent state of the account array where each accounts balance is updated atomically and correctly
+
+
+
+===========================================================================================
+
+Task 2: Starting order
+
+Unlike for a normal program where lines of code run in the same order every time the process is executed, concurrent programming has no guaranteed order of execution. Every time the program in launched it could be a different thread to be executed first every time. 
+
+It is the OS thread scheduler that determines the starting order of the threads based on various factors such the threade priority, state and the scheduling algorithm used by the OS. 
+
+Changing the order of the threads will not guarantee the consistency of the accounts. The problem is that the threads are not synchronized when accessing and modifying the account balance. 
+
+=========================================================================================== 
+
+Task 3: Critical Section 
+
+
+The critical section is there were multiple threads access shared resources. For this particular case it is where the account balances and modified without proper synchronization. For this case, it is the deposit and withdraw methods, but more precisely it would be the statement where the balance is modified. I added arrows next to these specific lines (one in each method).
+
+public void debosit(double amount){
+		
+	// Waste some time doing fake computations
+	// do not remove or modify any of the following 3 statements
+	double k = 999999999;
+	for(int i=0;i<100;i++)
+		k = k / 2;
+
+	balance = balance + amount;      <-------------
+
+	// Waste some time doing fake computations
+	// do not remove or modify any of the following 3 statements
+	k = 999999999;
+	for(int i=0;i<100;i++)
+		k = k / 2;
+
+	}
+
+public void withdraw(double amount){
+
+	// Waste some time doing fake computations
+	// do not remove or modify any of the following 3 statements
+	double k = 999999999;
+	for(int i=0;i<100;i++)
+		k = k / 2;
+
+	balance = balance - amount;      <-------------    
+
+	// Waste some time doing fake computations
+	// do not remove or modify any of the following 3 statements
+	k = 999999999;
+	for(int i=0;i<100;i++)
+		k = k / 2;
+}
+	
+
+===================================================================================
+
+Task 6: Synchronized block versus synchronized method
+
+There are a few key advantages of synchronized block over synchronized methods. First, synchronizing statements reduce the scope which is locked, resulting in better performance since the scope is inversely proportional to the performance. You also have more control which blocks of code need to be locked. 
+
+On the otherhand, synchronized methods are more simple. In the case of the accounts, you know the inconsistencies are from the accessor and modifier methods. therefore you can simply lock the entire methods rather than finding specific segments which need to be synchronized. 
+
